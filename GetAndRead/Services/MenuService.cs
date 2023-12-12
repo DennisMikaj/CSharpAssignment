@@ -18,10 +18,10 @@
                 Console.WriteLine("### MENU ###");
                 Console.WriteLine("### 1. Visa Listan ###");
                 Console.WriteLine("### 2. Lägg till i listan ###");
+                Console.WriteLine("### 3. Ta bort en kontakt med hjälp av e-post ###");
                 Console.WriteLine("### 0. Avsluta ###");
 
                 var UserOption = Console.ReadLine();
-                //var customerService = new CustomerServices();
 
                 switch (UserOption)
                 {
@@ -29,16 +29,39 @@
                     case "1":
 
                         Console.Clear();
+                        Console.WriteLine("### Visa detaljer för en kontakt ###");
                         var list = _customerService.GetCustomersFromList();
+                        int i = 0;
                         foreach (var contact in list)
                         {
-                            int i = 0; i++;
+                            i++;
                             Console.WriteLine(
-                            $"{i}. Namn: {contact.FirstName} {contact.LastName} <{contact.Email}> Telefonnummer: {contact.PhoneNumber}. Adress: {contact.Adress}");
+                            $"{i}. Namn: {contact.FirstName} {contact.LastName}.<{contact.Email}>");
                         }
+                        Console.Write("Ange numret för kontakten du vill se detaljer för: ");
+                        if (int.TryParse(Console.ReadLine(), out int contactNumber) && contactNumber > 0)
+                        {
+                            var contactList = _customerService.GetCustomersFromList().ToList();
 
+                            if (contactNumber <= contactList.Count)
+                            {
+                                var selectedContact = contactList[contactNumber - 1];
+                                Console.WriteLine($"Detaljer för kontakten:");
+                                Console.WriteLine($"Namn: {selectedContact.FirstName} {selectedContact.LastName}");
+                                Console.WriteLine($"Email: {selectedContact.Email}");
+                                Console.WriteLine($"Telefonnummer: {selectedContact.PhoneNumber}");
+                                Console.WriteLine($"Adress: {selectedContact.Adress}");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Ogiltigt nummer. Försök igen.");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Ogiltigt nummer. Försök igen.");
+                        }
                         Console.ReadKey();
-                        Console.WriteLine();
                         break;
 
                     case "2":
@@ -66,17 +89,35 @@
                         Console.ReadKey(); 
                         break;
 
+
+                    case "3":
+                        Console.Clear();
+                        Console.WriteLine("### Ta bort en kontakt med hjälp av e-post ###");
+                        Console.Write("Ange e-post för kontakten du vill ta bort: ");
+                        string emailToDelete = Console.ReadLine()!;
+                        _customerService.DeleteContactByEmail(emailToDelete);
+                        Console.ReadKey();
+                        break;
+
+
                     case "0": 
                         Console.Clear();
                         Console.WriteLine("Tack för idag.");
                         Console.ReadKey();
                         Environment.Exit(0);
                         break;
+
+                    default:
+                        Console.WriteLine("Ogiltigt val. Försök igen.");
+                        Console.ReadKey();
+                        break;
                 }
             }
         }
-
+        
     }
+
+    
 }
 
 
