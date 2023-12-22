@@ -1,17 +1,12 @@
-﻿using System.Diagnostics;
+﻿using GetAndRead.Shared.Interfaces;
+using System.Diagnostics;
 
 
 
 namespace GetAndRead.Services;
 
-    public interface IFileService
-{
-    bool SaveContentToFile(string content);
 
-    string GetContentFromFile();
-}
-
-internal class FileService(string filePath) : IFileService
+public class FileService(string filePath) : IFileService
 {
     private readonly string _filePath = filePath;
 

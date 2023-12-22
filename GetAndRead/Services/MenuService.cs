@@ -1,4 +1,8 @@
-﻿namespace GetAndRead.Services
+﻿using GetAndRead.Shared.Services;
+using GetAndRead.Shared.Models;
+
+
+namespace GetAndRead.Services
 {
     internal class MenuService
     {
@@ -25,9 +29,8 @@
 
                 switch (UserOption)
                 {
-
+                    //Kod för att visa hela listan med kontakter
                     case "1":
-
                         Console.Clear();
                         Console.WriteLine("### Visa detaljer för en kontakt ###");
                         var list = _customerService.GetCustomersFromList();
@@ -35,8 +38,7 @@
                         foreach (var contact in list)
                         {
                             i++;
-                            Console.WriteLine(
-                            $"{i}. Namn: {contact.FirstName} {contact.LastName}.<{contact.Email}>");
+                            Console.WriteLine($"{i}. Namn: {contact.FirstName} {contact.LastName}.<{contact.Email}>");
                         }
                         Console.Write("Ange numret för kontakten du vill se detaljer för: ");
                         if (int.TryParse(Console.ReadLine(), out int contactNumber) && contactNumber > 0)
@@ -64,6 +66,7 @@
                         Console.ReadKey();
                         break;
 
+                        //Kod för att lägga till en kontakt
                     case "2":
                         Console.Clear();
                         Console.WriteLine("### Lägg till en kontakt.");
@@ -77,7 +80,7 @@
                         string newContactPhone = Console.ReadLine()!;
                         Console.Write("Adress: ");
                         string newContactAdress = Console.ReadLine()!;
-                        _customerService.AddCustomerToList(new GetAndRead.Models.Customer
+                        _customerService.AddCustomerToList(new GetAndRead.Shared.Models.Customer
                         {
                             FirstName = $"{newContactFirstName}",
                             LastName = $"{newContactLastName}",
@@ -89,7 +92,7 @@
                         Console.ReadKey(); 
                         break;
 
-
+                        //Kod för att Ta bort en kontakt
                     case "3":
                         Console.Clear();
                         Console.WriteLine("### Ta bort en kontakt med hjälp av e-post ###");
@@ -99,14 +102,15 @@
                         Console.ReadKey();
                         break;
 
-
+                        //Stänger av programmet
                     case "0": 
                         Console.Clear();
                         Console.WriteLine("Tack för idag.");
                         Console.ReadKey();
                         Environment.Exit(0);
                         break;
-
+                        
+                        //om valet inte är 0 - 3, ogiltigt svar.
                     default:
                         Console.WriteLine("Ogiltigt val. Försök igen.");
                         Console.ReadKey();

@@ -2,30 +2,33 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using GetAndRead.Models;
+using GetAndRead.Services;
+using GetAndRead.Shared.Models;
 using Newtonsoft.Json;
+using Shared.Interfaces;
 
+namespace GetAndRead.Shared.Services;
 
-namespace GetAndRead.Services;
-
-internal class CustomerServices
+public class CustomerServices : ICustomerServices
 {
     private readonly FileService _fileService = new FileService(@"C:\Solutions\GetAndRead\content.json");
     private List<Customer> _customerList = new List<Customer>();
-    
-    public void AddCustomerToList(Customer customer)
+
+    public bool AddCustomerToList(Customer customer)
     {
         try
         {
             if (!_customerList.Any(x => x.Email == customer.Email))
-        {
-            
+            {
+
                 _customerList.Add(customer);
                 _fileService.SaveContentToFile(JsonConvert.SerializeObject(_customerList));
-        }
+                return true;
+            }
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
-        
+        return false;
+
     }
 
     public IEnumerable<Customer> GetCustomersFromList()
@@ -33,7 +36,7 @@ internal class CustomerServices
         try
         {
             var content = _fileService.GetContentFromFile();
-           if (!string.IsNullOrEmpty(content))
+            if (!string.IsNullOrEmpty(content))
             {
                 _customerList = JsonConvert.DeserializeObject<List<Customer>>(content)!;
             }
